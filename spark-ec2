@@ -1,0 +1,10 @@
+#!/bin/sh
+# -*- coding: utf-8 -*-
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
+
+# Preserve o CWD do usuário para que os caminhos relativos sejam passados corretamente para
+# o script Python.
+SPARK_EC2_DIR="$(dirname "$0")"
+
+python -Wdefault "${SPARK_EC2_DIR}/spark_ec2.py" "$@"
