@@ -36,33 +36,17 @@ else:
     raw_input = input
     xrange = range
 
-SPARK_EC2_VERSION = "2.0.0"
+SPARK_EC2_VERSION = "2.2.0"
 SPARK_EC2_DIR = os.path.dirname(os.path.realpath(__file__))
 
 VALID_SPARK_VERSIONS = set([
-    "2.0.0",
-    "2.0.1",
-    "2.0.2",
     "2.1.0",
-    "2.1.1"
+    "2.1.1",
+    "2.2.0",
+    "2.2.1"
 ])
 
 SPARK_TACHYON_MAP = {
-    "1.0.0": "0.4.1",
-    "1.0.1": "0.4.1",
-    "1.0.2": "0.4.1",
-    "1.1.0": "0.5.0",
-    "1.1.1": "0.5.0",
-    "1.2.0": "0.5.0",
-    "1.2.1": "0.5.0",
-    "1.3.0": "0.5.0",
-    "1.3.1": "0.5.0",
-    "1.4.0": "0.6.4",
-    "1.4.1": "0.6.4",
-    "1.5.0": "0.7.1",
-    "1.5.1": "0.7.1",
-    "1.5.2": "0.7.1",
-    "1.6.0": "0.8.2",
     "2.0.0-preview": "",
 }
 
@@ -70,8 +54,8 @@ DEFAULT_SPARK_VERSION = SPARK_EC2_VERSION
 DEFAULT_SPARK_GITHUB_REPO = "https://github.com/apache/spark"
 
 # Default location para pegar os scripts do projeto (e ami-list)
-DEFAULT_SPARK_EC2_GITHUB_REPO = "https://github.com/amplab/spark-ec2"
-DEFAULT_SPARK_EC2_BRANCH = "branch-2.0"
+DEFAULT_SPARK_EC2_GITHUB_REPO = "https://github.com/ricardojohnny/spark-ec2"
+DEFAULT_SPARK_EC2_BRANCH = "master"
 
 
 def setup_external_libs(libs):
@@ -150,7 +134,7 @@ def parse_args():
         help="Numero de slaves a serem iniciados (padrao: %default)")
     parser.add_option(
         "-w", "--wait", type="int",
-        help="DEPRECATED (remover--nao mais necessario) - Segundos para aguardar a criacao de nos")
+        help="DEPRECATED (remover o -- nao mais necessario) - Segundos para aguardar a criacao de nos")
     parser.add_option(
         "-k", "--key-pair",
         help="Key pair a ser usado nas instancias")
@@ -523,7 +507,7 @@ def launch_cluster(conn, opts, cluster_name):
         master_group.authorize('tcp', 8088, 8088, authorized_address)
         if opts.ganglia:
             master_group.authorize('tcp', 5080, 5080, authorized_address)
-    if slave_group.rules == []:  # Grupo ja criado
+    if slave_group.rules == []:  # Grupo de slaves criado
         if opts.vpc_id is None:
             slave_group.authorize(src_group=master_group)
             slave_group.authorize(src_group=slave_group)
@@ -591,7 +575,6 @@ def launch_cluster(conn, opts, cluster_name):
             # O primeiro ephemeral drive eh /dev/sdb.
             name = '/dev/sd' + string.ascii_letters[i + 1]
             block_map[name] = dev
-
 
 
     # Criando slaves (testando instancias Spot)
@@ -677,7 +660,7 @@ def launch_cluster(conn, opts, cluster_name):
                     instance_initiated_shutdown_behavior=opts.instance_initiated_shutdown_behavior,
                     instance_profile_name=opts.instance_profile_name)
                 slave_nodes += slave_res.instances
-                print("Launched {s} slave{plural_s} in {z}, regid = {r}".format(
+                print("Criado {s} slave{plural_s} em {z}, regid = {r}".format(
                       s=num_slaves_this_zone,
                       plural_s=('' if num_slaves_this_zone == 1 else 's'),
                       z=zone,
@@ -756,7 +739,7 @@ def get_existing_cluster(conn, opts, cluster_name, die_on_error=True):
         Obtenha as instâncias EC2 em um cluster existente, se disponível.
         Retorna uma tupla de listas de objetos de instância EC2 para os mestres e escravos.
     """
-    print("Verificando se existe cluster {c} in region {r}...".format(
+    print("Verificando se existe cluster {c} na regiao {r}...".format(
           c=cluster_name, r=opts.region))
 
     def get_instances(group_names):
@@ -782,7 +765,7 @@ def get_existing_cluster(conn, opts, cluster_name, die_on_error=True):
               plural_s=('' if len(slave_instances) == 1 else 's')))
 
     if not master_instances and die_on_error:
-        print("ERROR: Nao foi possivel encontrar um master para cluster {c} na regiao {r}.".format(
+        print("ERRO: Nao foi possivel encontrar um master para cluster {c} na regiao {r}.".format(
               c=cluster_name, r=opts.region), file=sys.stderr)
         sys.exit(1)
 
@@ -1186,7 +1169,7 @@ def ssh(host, opts, command):
             tries = tries + 1
 
 
-# Backported do Python 2.7 para compatibilidade com 2.6 (Ver SPARK-1990)
+# Backported do Python 2.7 para compatibilidade com 2.6
 # Isso foi achado no stackoverflow
 def _check_output(*popenargs, **kwargs):
     if 'stdout' in kwargs:
@@ -1322,7 +1305,7 @@ def real_main():
 # Evite forks com nomes diferente de spark-ec2 por enquanto.
     if opts.spark_ec2_git_repo.endswith("/") or \
             opts.spark_ec2_git_repo.endswith(".git") or \
-            not opts.spark_ec2_git_repo.startswith("https://gitlab.wssim.com.br") or \
+            not opts.spark_ec2_git_repo.startswith("https://github.com") or \
             not opts.spark_ec2_git_repo.endswith("spark-ec2"):
         print("spark-ec2-git-repo deve ser um repo do Gitlab WSSIM no / ou no .git. "
               "Alem disso, somente apoio forks com nomes spark-ec2.", file=stderr)
@@ -1422,8 +1405,8 @@ def real_main():
                             success = False
                             print("Falha ao deletar o security group %s" % group.name)
 
-                    # Mano... Infelizmente o group.revoke() retorna True mesmo se uma regra não foi
-                    # apagado, entao isso precisa ser reiniciado se algo falhar
+                    # Mano... Infelizmente o group.revoke() retorna True mesmo se uma regra não for
+                    # apagada, entao isso precisa ser reiniciado se algo falhar
                     # preciso ver isso com o Evaristo ou Ivan
                     if success:
                         break
