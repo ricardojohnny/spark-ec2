@@ -1,7 +1,6 @@
 #!/bin/bash
-# Creates an AMI for the Spark EC2 scripts starting with a stock Amazon
 # Linux AMI.
-# This has only been tested with Amazon Linux AMI 2014.03.2
+# Use a Amazon Linux AMI 2017.12.0
 
 set -e
 
@@ -52,11 +51,12 @@ wget "http://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3
 tar xvzf apache-maven-3.5.2-bin.tar.gz
 mv apache-maven-3.5.2 /opt/
 
-# Edit bash profile
+# Edit bash profile (Edit on 22/02/18)
 echo "export PS1=\"\\u@\\h \\W]\\$ \"" >> ~/.bash_profile
 echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0" >> ~/.bash_profile
 echo "export M2_HOME=/opt/apache-maven-3.5.2" >> ~/.bash_profile
 echo "export PATH=\$PATH:\$M2_HOME/bin" >> ~/.bash_profile
+echo "export SPARK_HOME=/root/spark" >> ~/.bash_profile
 
 source ~/.bash_profile
 
@@ -80,3 +80,6 @@ ln -sf /usr/lib64/libsnappy.so.1 /root/hadoop-native/.
 echo '#!/bin/bash' > /usr/bin/realpath
 echo 'readlink -e "$@"' >> /usr/bin/realpath
 chmod a+x /usr/bin/realpath
+
+# Start Jobserver
+sh /root/jobserver/start.sh
