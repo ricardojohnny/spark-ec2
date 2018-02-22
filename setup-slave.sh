@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Dev tools
+sudo yum remove java-*
+sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel gcc gcc-c++ ant git
+
 # Desabilitando o Transparent Huge Pages (THP)
 if [[ -e /sys/kernel/mm/transparent_hugepage/enabled ]]; then
   echo never > /sys/kernel/mm/transparent_hugepage/enabled
