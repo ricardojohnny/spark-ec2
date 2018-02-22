@@ -9,15 +9,6 @@ fi
 
 case "$HADOOP_MAJOR_VERSION" in
   1)
-    wget http://s3.amazonaws.com/spark-related-packages/hadoop-1.0.4.tar.gz
-    echo "Descompactando Hadoop"
-    tar xvzf hadoop-1.0.4.tar.gz > /tmp/spark-ec2_hadoop.log
-    rm hadoop-*.tar.gz
-    mv hadoop-1.0.4/ ephemeral-hdfs/
-    sed -i 's/-jvm server/-server/g' /root/ephemeral-hdfs/bin/hadoop
-    cp /root/hadoop-native/* /root/ephemeral-hdfs/lib/native/
-    ;;
-  2)
     wget http://s3.amazonaws.com/spark-related-packages/hadoop-2.0.0-cdh4.2.0.tar.gz
     echo "Descompactando Hadoop"
     tar xvzf hadoop-*.tar.gz > /tmp/spark-ec2_hadoop.log
