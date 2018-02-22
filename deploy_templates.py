@@ -6,26 +6,15 @@ from __future__ import with_statement
 import os
 import sys
 
-<<<<<<< HEAD
-# Deploy the configuration file templates in the spark-ec2/templates directory
-# to the root filesystem, substituting variables such as the master hostname,
-# ZooKeeper URL, etc as read from the environment.
-
-# Find system memory in KB and compute Spark's default limit from that
-=======
 # Deploy do diretorio com os arquivos de templates de configuração spark-ec2/templates
 # Encontra a memória do sistema em KB e calcula o limite padrão da Spark
->>>>>>> origin/master
 mem_command = "cat /proc/meminfo | grep MemTotal | awk '{print $2}'"
 cpu_command = "nproc"
 
 master_ram_kb = int(
   os.popen(mem_command).read().strip())
-<<<<<<< HEAD
-# This is the master's memory. Try to find slave's memory as well
-=======
+
 # Memória do Master. Tem que verificar também a memória dos Slaves
->>>>>>> origin/master
 first_slave = os.popen("cat /root/spark-ec2/slaves | head -1").read().strip()
 
 slave_mem_command = "ssh -t -o StrictHostKeyChecking=no %s %s" %\
@@ -42,23 +31,7 @@ system_ram_kb = min(slave_ram_kb, master_ram_kb)
 
 system_ram_mb = system_ram_kb / 1024
 slave_ram_mb = slave_ram_kb / 1024
-<<<<<<< HEAD
-# Leave some RAM for the OS, Hadoop daemons, and system caches
-if slave_ram_mb > 100*1024:
-  slave_ram_mb = slave_ram_mb - 15 * 1024 # Leave 15 GB RAM
-elif slave_ram_mb > 60*1024:
-  slave_ram_mb = slave_ram_mb - 10 * 1024 # Leave 10 GB RAM
-elif slave_ram_mb > 40*1024:
-  slave_ram_mb = slave_ram_mb - 6 * 1024 # Leave 6 GB RAM
-elif slave_ram_mb > 20*1024:
-  slave_ram_mb = slave_ram_mb - 3 * 1024 # Leave 3 GB RAM
-elif slave_ram_mb > 10*1024:
-  slave_ram_mb = slave_ram_mb - 2 * 1024 # Leave 2 GB RAM
-else:
-  slave_ram_mb = max(512, slave_ram_mb - 1300) # Leave 1.3 GB RAM
 
-# Make tachyon_mb as slave_ram_mb for now.
-=======
 # Tem que deixar alguma RAM para o sistema operacional, pras daemons do Hadoop e caches do sistema
 if slave_ram_mb > 100*1024:
   slave_ram_mb = slave_ram_mb - 15 * 1024 # Saida de 15 GB RAM
@@ -74,7 +47,6 @@ else:
   slave_ram_mb = max(512, slave_ram_mb - 1300) # Saida de 1.3 GB RAM
 
 # Fazendo o tachyon_mb como slave_ram_mb.
->>>>>>> origin/master
 tachyon_mb = slave_ram_mb
 
 worker_instances_str = ""
@@ -83,12 +55,8 @@ worker_cores = slave_cpus
 if os.getenv("SPARK_WORKER_INSTANCES") != "":
   worker_instances = int(os.getenv("SPARK_WORKER_INSTANCES", 1))
   worker_instances_str = "%d" % worker_instances
-<<<<<<< HEAD
-  # Distribute equally cpu cores among worker instances
-=======
 
   # Distribui igualmente os núcleos da CPU entre as instâncias dos Workers
->>>>>>> origin/master
   worker_cores = max(slave_cpus / worker_instances, 1)
 
 template_vars = {
@@ -124,11 +92,7 @@ for path, dirs, files in os.walk(template_dir):
         dest_file = os.path.join(dest_dir, filename)
         with open(os.path.join(path, filename)) as src:
           with open(dest_file, "w") as dest:
-<<<<<<< HEAD
-            print("Configuring " + dest_file)
-=======
             print("Configurando " + dest_file)
->>>>>>> origin/master
             text = src.read()
             for key in template_vars:
               text = text.replace("{{" + key + "}}", template_vars[key] or '')

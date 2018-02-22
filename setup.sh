@@ -94,18 +94,18 @@ for module in $MODULES; do
 done
 
 # Deploy templates
-# TODO: Mover os templates de confioguracao do per-module ?
+# TODO: Mover os templates de configuracao do per-module ?
 echo "Criando arquivos de configuracao local..."
 ./deploy_templates.py
 
 # Copiando spark conf por default
 echo "Enviando arquivos de configuracao do Spark..."
-chmod u+x /root/spark/conf/spark-env.sh
+chmod u+x /root/spark/conf/spark-env.sh 
 /root/spark-ec2/copy-dir /root/spark/conf
 
 # Instalar mais modulos
 for module in $MODULES; do
-  echo "Setting up $module"
+  echo "Iniciando $module"
   module_setup_start_time="$(date +'%s')"
   source ./$module/setup.sh
   sleep 0.1

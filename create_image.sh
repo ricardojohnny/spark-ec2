@@ -5,24 +5,28 @@
 set -e
 
 if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root" 1>&2
+   echo "Execute como root" 1>&2
    exit 1
 fi
 
 # Dev tools
 sudo yum install -y java-1.8.0-openjdk-devel gcc gcc-c++ ant git
+
 # Perf tools
 sudo yum install -y dstat iotop strace sysstat htop perf
 sudo debuginfo-install -q -y glibc
 sudo debuginfo-install -q -y kernel
 sudo yum --enablerepo='*-debug*' install -q -y java-1.8.0-openjdk-debuginfo.x86_64
 
-# PySpark and MLlib deps
+# PySpark e MLlib deps
 sudo yum install -y  python-matplotlib python-tornado scipy libgfortran
+
 # SparkR deps
 sudo yum install -y R
-# Other handy tools
+
+# Other tools
 sudo yum install -y pssh
+
 # Ganglia
 sudo yum install -y ganglia ganglia-web ganglia-gmond ganglia-gmetad
 
@@ -81,5 +85,5 @@ echo '#!/bin/bash' > /usr/bin/realpath
 echo 'readlink -e "$@"' >> /usr/bin/realpath
 chmod a+x /usr/bin/realpath
 
-# Start Jobserver
+# Start Jobserver (clone project D. Colombo)
 sh /root/jobserver/start.sh
