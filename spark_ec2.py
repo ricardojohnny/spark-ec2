@@ -667,7 +667,7 @@ def launch_cluster(conn, opts, cluster_name):
                       r=slave_res.id))
             i += 1
 
-    # Criando masters
+    # Criando master
     if existing_masters:
         print("Iniciando master...")
         for inst in existing_masters:
@@ -699,7 +699,7 @@ def launch_cluster(conn, opts, cluster_name):
 
     # Time de aguarde correspondente a SPARK-4983
     print("Aguardando propagacao da instancia na AWS...")
-    time.sleep(15)
+    time.sleep(25)
 
     # Fornece os nomes descritivos das instâncias e define as tags adicionais.
     additional_tags = {}
@@ -792,7 +792,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio']
+               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio','jobserver']
 
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
@@ -1026,11 +1026,13 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
     hdfs_data_dirs = "/mnt/ephemeral-hdfs/data"
     mapred_local_dirs = "/mnt/hadoop/mrlocal"
     spark_local_dirs = "/mnt/spark"
+    jobserver_local_dir = "/mnt/jobserver"
     if num_disks > 1:
         for i in range(2, num_disks + 1):
             hdfs_data_dirs += ",/mnt%d/ephemeral-hdfs/data" % i
             mapred_local_dirs += ",/mnt%d/hadoop/mrlocal" % i
             spark_local_dirs += ",/mnt%d/spark" % i
+            jobserver_local_dir += "/mnt%d/jobserver" % i
 
     cluster_url = "%s:7077" % active_master
 

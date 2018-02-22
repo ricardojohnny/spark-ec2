@@ -33,7 +33,7 @@ case "$HADOOP_MAJOR_VERSION" in
     echo "Descompactando Hadoop"
     tar xvzf hadoop-*.tar.gz > /tmp/spark-ec2_hadoop.log
     rm hadoop-*.tar.gz
-    mv hadoop-2.4.0/ persistent-hdfs/
+    mv hadoop-2.7.3/ persistent-hdfs/
 
     # Have single conf dir
     rm -rf /root/persistent-hdfs/etc/hadoop/
@@ -45,5 +45,4 @@ case "$HADOOP_MAJOR_VERSION" in
      return 1
 esac
 /root/spark-ec2/copy-dir /root/persistent-hdfs
-
 popd > /dev/null
