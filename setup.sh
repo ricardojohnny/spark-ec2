@@ -1,16 +1,9 @@
 #!/bin/bash
-<<<<<<< HEAD
-
-sudo yum install -y -q pssh
-
-# usage: echo_time_diff name start_time end_time
-=======
 # Wealthsystems [[BDD Project]]
 # Ricardo Johnny <ricardo.jesus@wssim.com.br>
 
 sudo yum install -y -q pssh
 
->>>>>>> origin/master
 echo_time_diff () {
   local format='%Hh %Mm %Ss'
 
@@ -18,19 +11,6 @@ echo_time_diff () {
   echo "[timing] $1: " "$(date -u -d@"$diff_secs" +"$format")"
 }
 
-<<<<<<< HEAD
-# Make sure we are in the spark-ec2 directory
-pushd /root/spark-ec2 > /dev/null
-
-# Load the environment variables specific to this AMI
-source /root/.bash_profile
-
-# Load the cluster variables set by the deploy script
-source ec2-variables.sh
-
-# Set hostname based on EC2 private DNS name, so that it is set correctly
-# even if the instance is restarted with a different private DNS name
-=======
 # Certificando se esteja no diretório spark-ec2
 pushd /root/spark-ec2 > /dev/null
 
@@ -42,24 +22,15 @@ source /root/.bash_profile
 source ec2-variables.sh
 
 # Setando hostname baseado no EC2 private DNS, e verificando se esta corretamente setado
->>>>>>> origin/master
 PRIVATE_DNS=`wget -q -O - http://169.254.169.254/latest/meta-data/local-hostname`
 PUBLIC_DNS=`wget -q -O - http://169.254.169.254/latest/meta-data/hostname`
 hostname $PRIVATE_DNS
 echo $PRIVATE_DNS > /etc/hostname
-<<<<<<< HEAD
-export HOSTNAME=$PRIVATE_DNS  # Fix the bash built-in hostname variable too
-
-echo "Setting up Spark on `hostname`..."
-
-# Set up the masters, slaves, etc files based on cluster env variables
-=======
 export HOSTNAME=$PRIVATE_DNS
 
 echo "Setando o hostname do node Spark..."
 
 # Setando as variaveis do cluster nos master e slaves
->>>>>>> origin/master
 echo "$MASTERS" > masters
 echo "$SLAVES" > slaves
 
@@ -79,17 +50,10 @@ if [[ `tty` == "not a tty" ]] ; then
     exit 1
 fi
 
-<<<<<<< HEAD
-echo "Setting executable permissions on scripts..."
-find . -regex "^.+.\(sh\|py\)" | xargs chmod a+x
-
-echo "RSYNC'ing /root/spark-ec2 to other cluster nodes..."
-=======
 echo "Verificando as permissoes nos scripts..."
 find . -regex "^.+.\(sh\|py\)" | xargs chmod a+x
 
 echo "RSYNC'ing /root/spark-ec2 para outros nodes do cluster..."
->>>>>>> origin/master
 rsync_start_time="$(date +'%s')"
 for node in $SLAVES $OTHER_MASTERS; do
   echo $node
@@ -101,11 +65,7 @@ wait
 rsync_end_time="$(date +'%s')"
 echo_time_diff "rsync /root/spark-ec2" "$rsync_start_time" "$rsync_end_time"
 
-<<<<<<< HEAD
-echo "Running setup-slave on all cluster nodes to mount filesystems, etc..."
-=======
 echo "Rodando o setup-slave em todos os nodes do cluster para montar o sistema de arquivos, etc..."
->>>>>>> origin/master
 setup_slave_start_time="$(date +'%s')"
 pssh --inline \
     --host "$MASTERS $SLAVES" \
@@ -116,12 +76,7 @@ pssh --inline \
 setup_slave_end_time="$(date +'%s')"
 echo_time_diff "setup-slave" "$setup_slave_start_time" "$setup_slave_end_time"
 
-<<<<<<< HEAD
-# Always include 'scala' module if it's not defined as a work around
-# for older versions of the scripts.
-=======
 # Sempre incluir o modulo do 'scala'
->>>>>>> origin/master
 if [[ ! $MODULES =~ *scala* ]]; then
   MODULES=$(printf "%s\n%s\n" "scala" $MODULES)
 fi
@@ -135,22 +90,6 @@ for module in $MODULES; do
   fi
   module_init_end_time="$(date +'%s')"
   echo_time_diff "$module init" "$module_init_start_time" "$module_init_end_time"
-<<<<<<< HEAD
-  cd /root/spark-ec2  # guard against init.sh changing the cwd
-done
-
-# Deploy templates
-# TODO: Move configuring templates to a per-module ?
-echo "Creating local config files..."
-./deploy_templates.py
-
-# Copy spark conf by default
-echo "Deploying Spark config files..."
-chmod u+x /root/spark/conf/spark-env.sh
-/root/spark-ec2/copy-dir /root/spark/conf
-
-# Setup each module
-=======
   cd /root/spark-ec2
 done
 
@@ -164,8 +103,7 @@ echo "Enviando arquivos de configuracao do Spark..."
 chmod u+x /root/spark/conf/spark-env.sh
 /root/spark-ec2/copy-dir /root/spark/conf
 
-# Instalar mais module
->>>>>>> origin/master
+# Instalar mais modulos
 for module in $MODULES; do
   echo "Setting up $module"
   module_setup_start_time="$(date +'%s')"
@@ -173,11 +111,7 @@ for module in $MODULES; do
   sleep 0.1
   module_setup_end_time="$(date +'%s')"
   echo_time_diff "$module setup" "$module_setup_start_time" "$module_setup_end_time"
-<<<<<<< HEAD
-  cd /root/spark-ec2  # guard against setup.sh changing the cwd
-=======
   cd /root/spark-ec2
->>>>>>> origin/master
 done
 
 popd > /dev/null
