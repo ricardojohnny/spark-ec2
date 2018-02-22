@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Setup ephemeral-hdfs
+# instalando ephemeral-hdfs
 mkdir -p /mnt/ephemeral-hdfs/logs
 mkdir -p /mnt/hadoop-logs
 
-# Setup yarn logs, local dirs
+# instalando yarn logs, local dirs
 mkdir -p /mnt/yarn-local
 mkdir -p /mnt/yarn-logs
 
-# Create Hadoop and HDFS directories in a given parent directory
-# (for example /mnt, /mnt2, and so on)
+# Criando diretorios para o Hadoop e HDFS
+# (por exemplo /mnt, /mnt2)
 function create_hadoop_dirs {
   location=$1
   if [[ -e $location ]]; then
@@ -19,7 +19,7 @@ function create_hadoop_dirs {
   fi
 }
 
-# Set up Hadoop and Mesos directories in /mnt
+# Setando diretorios do Hadoop e Mesos no /mnt
 create_hadoop_dirs /mnt
 create_hadoop_dirs /mnt2
 create_hadoop_dirs /mnt3

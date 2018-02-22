@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
+<<<<<<< HEAD
 # Variaveis de ambiente para o funcionamento do script
+=======
+# Variaveis que serão lidas pelo script spark-ec2.sh 
+>>>>>>> origin/master
 export MASTERS="{{master_list}}"
 export SLAVES="{{slave_list}}"
 export HDFS_DATA_DIRS="{{hdfs_data_dirs}}"

@@ -1,4 +1,9 @@
 #!/bin/bash
+<<<<<<< HEAD
+=======
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
+>>>>>>> origin/master
 
 pushd /root > /dev/null
 
@@ -10,7 +15,11 @@ fi
 case "$HADOOP_MAJOR_VERSION" in
   1)
     wget http://s3.amazonaws.com/spark-related-packages/hadoop-1.0.4.tar.gz
+<<<<<<< HEAD
     echo "Unpacking Hadoop"
+=======
+    echo "Descompactando Hadoop"
+>>>>>>> origin/master
     tar xvzf hadoop-1.0.4.tar.gz > /tmp/spark-ec2_hadoop.log
     rm hadoop-*.tar.gz
     mv hadoop-1.0.4/ persistent-hdfs/
@@ -18,7 +27,11 @@ case "$HADOOP_MAJOR_VERSION" in
     ;;
   2)
     wget http://s3.amazonaws.com/spark-related-packages/hadoop-2.0.0-cdh4.2.0.tar.gz
+<<<<<<< HEAD
     echo "Unpacking Hadoop"
+=======
+    echo "Descompactando Hadoop"
+>>>>>>> origin/master
     tar xvzf hadoop-*.tar.gz > /tmp/spark-ec2_hadoop.log
     rm hadoop-*.tar.gz
     mv hadoop-2.0.0-cdh4.2.0/ persistent-hdfs/
@@ -41,8 +54,16 @@ case "$HADOOP_MAJOR_VERSION" in
     ;;
 
   *)
+<<<<<<< HEAD
      echo "ERROR: Unknown Hadoop version"
      return 1
 esac
 /root/spark-ec2/copy-dir /root/persistent-hdfs
+=======
+     echo "ERRO: Versao do Hadoop desconhecida"
+     return 1
+esac
+/root/spark-ec2/copy-dir /root/persistent-hdfs
+
+>>>>>>> origin/master
 popd > /dev/null

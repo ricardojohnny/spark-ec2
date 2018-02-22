@@ -667,7 +667,7 @@ def launch_cluster(conn, opts, cluster_name):
                       r=slave_res.id))
             i += 1
 
-    # Criando master
+    # Criando masters
     if existing_masters:
         print("Iniciando master...")
         for inst in existing_masters:
@@ -699,7 +699,7 @@ def launch_cluster(conn, opts, cluster_name):
 
     # Time de aguarde correspondente a SPARK-4983
     print("Aguardando propagacao da instancia na AWS...")
-    time.sleep(25)
+    time.sleep(15)
 
     # Fornece os nomes descritivos das instâncias e define as tags adicionais.
     additional_tags = {}
@@ -792,7 +792,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio','jobserver']
+               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio', 'jobserver']
 
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
