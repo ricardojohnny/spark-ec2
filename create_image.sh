@@ -9,10 +9,6 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-# Dev tools
-sudo yum remove java-1.7.0-openjdk
-sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel gcc gcc-c++ ant git
-
 # Perf tools
 sudo yum install -y dstat iotop strace sysstat htop perf
 sudo debuginfo-install -q -y glibc
