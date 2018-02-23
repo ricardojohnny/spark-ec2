@@ -2,11 +2,6 @@
 # Wealthsystems [[BDD Project]]
 # Ricardo Johnny <ricardo.jesus@wssim.com.br>
 
-# Dev tools
-sudo yum remove java-*
-sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel gcc gcc-c++ ant git
-
-
 BIN_FOLDER="/root/spark/sbin"
 
 if [[ "0.7.3 0.8.0 0.8.1" =~ $SPARK_VERSION ]]; then
