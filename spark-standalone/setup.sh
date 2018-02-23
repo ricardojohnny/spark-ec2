@@ -33,3 +33,9 @@ sleep 30
 
 # Start Workers
 $BIN_FOLDER/start-slaves.sh
+
+# Time for start jobserver
+sleep 40
+
+# Start Jobserver (clone project D. Colombo)
+sh /root/jobserver/start.sh
