@@ -4,10 +4,6 @@
 
 sudo yum install -y -q pssh
 
-# Dev tools
-sudo yum remove java-1.7.0-openjdk
-sudo yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel gcc gcc-c++ ant git
-
 echo_time_diff () {
   local format='%Hh %Mm %Ss'
 
