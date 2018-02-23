@@ -23,13 +23,19 @@ echo "spark://""`cat /root/spark-ec2/masters`"":7077" > /root/spark-ec2/cluster-
 # Stop qualquer job rodando
 $BIN_FOLDER/stop-all.sh
 
-sleep 2
+sleep 30
 
 # Start Master
 $BIN_FOLDER/start-master.sh
 
 # Pause
-sleep 20
+sleep 30
 
 # Start Workers
 $BIN_FOLDER/start-slaves.sh
+
+# Time for start jobserver
+sleep 40
+
+# Start Jobserver (clone project D. Colombo)
+sh /root/jobserver/start.sh

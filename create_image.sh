@@ -81,6 +81,3 @@ ln -sf /usr/lib64/libsnappy.so.1 /root/hadoop-native/.
 echo '#!/bin/bash' > /usr/bin/realpath
 echo 'readlink -e "$@"' >> /usr/bin/realpath
 chmod a+x /usr/bin/realpath
-
-# Start Jobserver (clone project D. Colombo)
-sh /root/jobserver/start.sh
