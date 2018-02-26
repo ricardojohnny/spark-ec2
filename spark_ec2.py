@@ -36,7 +36,7 @@ else:
     raw_input = input
     xrange = range
 
-SPARK_EC2_VERSION = "2.2.0"
+SPARK_EC2_VERSION = "2.2.1"
 SPARK_EC2_DIR = os.path.dirname(os.path.realpath(__file__))
 
 VALID_SPARK_VERSIONS = set([
@@ -497,7 +497,7 @@ def launch_cluster(conn, opts, cluster_name):
         master_group.authorize('tcp', 4040, 4045, authorized_address)
         master_group.authorize('tcp', 8787, 8787, authorized_address)
         master_group.authorize('tcp', 8090, 8090, authorized_address)
-        # HDFS NFS gateway requer as portas 111,2049,4242 for tcp & udp
+        # HDFS NFS gateway requer as portas 111,2049,4242 para tcp & udp
         master_group.authorize('tcp', 111, 111, authorized_address)
         master_group.authorize('udp', 111, 111, authorized_address)
         master_group.authorize('tcp', 2049, 2049, authorized_address)
@@ -793,8 +793,11 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio', 'jobserver']
+               'mapreduce', 'spark-standalone', 'jobserver']
 
+# REMOVER ESSA CONFIG NA ENTREGA!
+# pois nao sera usado uma versao antiga do Hadoop...
+# (verificar se sera necessario para o NIFI.: A/c Pedrolo)
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
 
@@ -805,8 +808,8 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
     if opts.hadoop_major_version == "yarn":
         opts.worker_instances = ""
 
-    # Tome NOTA Ricardo: Sera clonado o repositório via Gitlab.wssim.. antes de executar o deploy_files para
-    # evitando que o ec2-variables.sh seja substituido
+    # Tome NOTA Ricardo: Sera clonado o repositório via Github ou Gitlab.wssim.. antes de executar o deploy_files para
+    # evitar que o script ec2-variables.sh seja substituido
     print("Clonando scripts spark-ec2 para {r}/tree/{b} no master...".format(
         r=opts.spark_ec2_git_repo, b=opts.spark_ec2_git_branch))
     ssh(
