@@ -1050,10 +1050,6 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
         spark_v = "%s|%s" % (opts.spark_git_repo, opts.spark_version)
         tachyon_v = ""
 
-    if tachyon_v == "":
-      print("Nenhuma versao Tachyon valida encontrada; Tachyon nao sera configurado")
-      modules.remove("tachyon")
-
     master_addresses = [get_dns_name(i, opts.private_ips) for i in master_nodes]
     slave_addresses = [get_dns_name(i, opts.private_ips) for i in slave_nodes]
     worker_instances_str = "%d" % opts.worker_instances if opts.worker_instances else ""
