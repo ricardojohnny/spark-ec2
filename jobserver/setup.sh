@@ -11,6 +11,8 @@ echo -e "....: permissoes setadas! :....\n"
 echo -e "....: Time of inicializing :....\n"
 sleep 60
 
+# Time
+
 # Start jobserver
 sh /root/jobserver/server_start.sh
 

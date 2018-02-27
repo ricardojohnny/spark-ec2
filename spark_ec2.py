@@ -785,7 +785,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'jobserver', 'h2']
+               'mapreduce', 'spark-standalone', 'h2', 'jobserver']
 
 # REMOVER ESSA CONFIG NA ENTREGA!
 # pois nao sera usado uma versao antiga do Hadoop...
@@ -1099,7 +1099,7 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
         "%s@%s:/" % (opts.user, active_master)
     ]
     subprocess.check_call(command)
-    
+
     # Removendo o diretorio temporario criado acima
     shutil.rmtree(tmp_dir)
 
