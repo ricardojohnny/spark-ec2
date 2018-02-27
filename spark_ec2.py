@@ -1024,6 +1024,7 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
     spark_local_dirs = "/mnt/spark"
     jobserver_local_dir = "/mnt/jobserver"
     h2_local_dir = "/mnt/h2"
+
     if num_disks > 1:
         for i in range(2, num_disks + 1):
             hdfs_data_dirs += ",/mnt%d/ephemeral-hdfs/data" % i
@@ -1098,6 +1099,7 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
         "%s@%s:/" % (opts.user, active_master)
     ]
     subprocess.check_call(command)
+    
     # Removendo o diretorio temporario criado acima
     shutil.rmtree(tmp_dir)
 
