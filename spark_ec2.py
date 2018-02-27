@@ -169,7 +169,7 @@ def parse_args():
     parser.add_option(
         "--spark-ec2-git-repo",
         default=DEFAULT_SPARK_EC2_GITHUB_REPO,
-        help="Repo oficial do projeto no Gitlab (default: %default)")
+        help="Repo oficial do projeto no Gitlab WSSIM (default: %default)")
     parser.add_option(
         "--spark-ec2-git-branch",
         default=DEFAULT_SPARK_EC2_BRANCH,
