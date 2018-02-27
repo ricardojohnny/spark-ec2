@@ -8,12 +8,11 @@ chmod a+x /root/jobserver/server_stop.sh
 echo -e "....: permissoes setadas! :....\n"
 
 # Time do Job
-echo -e "....: Setando as permissoes nos arquivos :....\n"
-sleep 90
-
+echo -e "....: Time of inicializing :....\n"
+sleep 60
 
 # Start jobserver
-./jobserver/server_start.sh
+sh /root/jobserver/server_start.sh
 
 sleep 10
 

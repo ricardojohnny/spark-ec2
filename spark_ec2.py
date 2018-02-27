@@ -46,10 +46,6 @@ VALID_SPARK_VERSIONS = set([
     "2.2.1"
 ])
 
-SPARK_TACHYON_MAP = {
-    "2.0.0-preview": "",
-}
-
 DEFAULT_SPARK_VERSION = SPARK_EC2_VERSION
 DEFAULT_SPARK_GITHUB_REPO = "https://github.com/apache/spark"
 
@@ -416,10 +412,6 @@ EC2_INSTANCE_TYPES = {
     "t2.large":    "hvm",
     "t2.xlarge":   "hvm",
 }
-
-
-def get_tachyon_version(spark_version):
-    return SPARK_TACHYON_MAP.get(spark_version, "")
 
 
 # Tentando resolver uma imagem IAM adequada, dada a arquitetura e a região da solicitação.
@@ -793,7 +785,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'jobserver']
+               'mapreduce', 'spark-standalone', 'jobserver', 'h2']
 
 # REMOVER ESSA CONFIG NA ENTREGA!
 # pois nao sera usado uma versao antiga do Hadoop...
@@ -1031,12 +1023,14 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
     mapred_local_dirs = "/mnt/hadoop/mrlocal"
     spark_local_dirs = "/mnt/spark"
     jobserver_local_dir = "/mnt/jobserver"
+    h2_local_dir = "/mnt/h2"
     if num_disks > 1:
         for i in range(2, num_disks + 1):
             hdfs_data_dirs += ",/mnt%d/ephemeral-hdfs/data" % i
             mapred_local_dirs += ",/mnt%d/hadoop/mrlocal" % i
             spark_local_dirs += ",/mnt%d/spark" % i
             jobserver_local_dir += "/mnt%d/jobserver" % i
+            h2_local_dir += "/mnt%d/h2" % i
 
     cluster_url = "%s:7077" % active_master
 
@@ -1044,11 +1038,9 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
         # Pre-built Spark deploy
         spark_v = get_validate_spark_version(opts.spark_version, opts.spark_git_repo)
         validate_spark_hadoop_version(spark_v, opts.hadoop_major_version)
-        tachyon_v = get_tachyon_version(spark_v)
     else:
         # Spark-only deploy personalizado
         spark_v = "%s|%s" % (opts.spark_git_repo, opts.spark_version)
-        tachyon_v = ""
 
     master_addresses = [get_dns_name(i, opts.private_ips) for i in master_nodes]
     slave_addresses = [get_dns_name(i, opts.private_ips) for i in slave_nodes]
@@ -1064,7 +1056,6 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
         "swap": str(opts.swap),
         "modules": '\n'.join(modules),
         "spark_version": spark_v,
-        "tachyon_version": tachyon_v,
         "hadoop_major_version": opts.hadoop_major_version,
         "spark_worker_instances": worker_instances_str,
         "spark_master_opts": opts.master_opts
@@ -1098,6 +1089,7 @@ def deploy_files(conn, root_dir, opts, master_nodes, slave_nodes, modules):
                                 text = text.replace("{{" + key + "}}", template_vars[key])
                             dest.write(text)
                             dest.close()
+
     # rsync de todo o diretario para a instancia Master
     command = [
         'rsync', '-rv',
