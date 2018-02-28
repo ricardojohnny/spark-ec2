@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
 
 # Variaveis de ambiente para o funcionamento do script
 export MASTERS="{{master_list}}"

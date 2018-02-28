@@ -1135,7 +1135,6 @@ def ssh_args(opts):
         parts += ['-i', opts.identity_file]
     return parts
 
-
 def ssh_command(opts):
     return ['ssh'] + ssh_args(opts)
 

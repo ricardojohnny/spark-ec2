@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
 
 from __future__ import with_statement
 

@@ -1,9 +1,9 @@
 #!/bin/bash
-
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
 # Iniciando uma nova instância no VPC geralmente resulta que `hostname' retornam algo como ' ip-10-1-1-24', que por sua vez é
 # não resolvivel. O que leva a problemas com o SparkUI que não starta ao iniciar com esse nome de host
 # Este script mapeia ip privado para esse nome de host via '/etc/hosts'.
-#
 
 MAC=`wget -q -O - http://169.254.169.254/latest/meta-data/mac`
 VCP_ID=`wget -q -O - http://169.254.169.254/latest/meta-data/network/interfaces/macs/${MAC}/vpc-id`

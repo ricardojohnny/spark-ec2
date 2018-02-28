@@ -1,4 +1,6 @@
 #!/bin/bash
+# Wealthsystems [[BDD Project]]
+# Ricardo Johnny <ricardo.jesus@wssim.com.br>
 
 if [ $# -lt 1 ]; then
   echo "Usage: create-swap.sh <amount of MB>"
