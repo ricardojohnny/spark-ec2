@@ -8,7 +8,7 @@ chmod a+x /root/jobserver/server_stop.sh
 echo -e "....: permissoes setadas! :....\n"
 
 # Time do Job
-echo -e "....: Time of inicializing :....\n"
+echo -e "....: Aguandando para iniciar o Jobserver :....\n"
 
 # Time Start
 sleep 60
@@ -18,4 +18,4 @@ sh /root/jobserver/server_start.sh
 
 sleep 10
 
-cat /var/log/job-server/spark-job-server.log
+cat /mnt/spark-jobserver/log/spark-job-server.log
