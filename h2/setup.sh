@@ -1,9 +1,9 @@
 #!/bin/bash
 # Arquitetura Cloud Wealthsystems
+# H2 Base
 
 echo -e "...: Set permissions and executing :...\n"
-chmod a+x /root/h2/bin/h2.sh
-sh /root/h2/bin/h2.sh -tcp >> /dev/null &
+sh /root/h2/bin/h2.sh -tcp -tcpAllowOthers >> /dev/null &
 
 # Time pos-start
 sleep 20
