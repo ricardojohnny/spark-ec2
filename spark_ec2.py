@@ -1135,6 +1135,7 @@ def ssh_args(opts):
         parts += ['-i', opts.identity_file]
     return parts
 
+
 def ssh_command(opts):
     return ['ssh'] + ssh_args(opts)
 
@@ -1302,7 +1303,8 @@ def real_main():
             opts.spark_ec2_git_repo.endswith(".git") or \
             not opts.spark_ec2_git_repo.startswith("https://github.com") or \
             not opts.spark_ec2_git_repo.endswith("spark-ec2"):
-        print("spark-ec2-git-repo deve ser um repo do Gitlab WSSIM no / ou no .git. ", file=stderr)
+        print("spark-ec2-git-repo deve ser um repo do Gitlab WSSIM no / ou no .git. "
+              "Alem disso, somente apoio forks com nomes spark-ec2.", file=stderr)
         sys.exit(1)
 
     if not (opts.deploy_root_dir is None or
@@ -1350,7 +1352,7 @@ def real_main():
             print("As seguintes instancias serao encerradas:")
             for inst in master_nodes + slave_nodes:
                 print("> %s" % get_dns_name(inst, opts.private_ips))
-            print("TODOS OS DADOS EM TODOS OS NODES SERAO PERDIDOS!!")
+            print("TODOS OS DADOS SOBRE TODOS OS NODES SERAO PERDIDOS!!")
 
         msg = "Tem certeza de que deseja matar o cluster {c}? (y/N) ".format(c=cluster_name)
         response = raw_input(msg)
@@ -1388,7 +1390,7 @@ def real_main():
                                                         to_port=rule.to_port,
                                                         src_group=grant)
 
-# Apenas um time eventual-consistency da AWS
+# Apenas um time para o AWS eventual-consistency
                     time.sleep(30)  # Aqui tem que ser longo (se rapido nao exclui direito) :-(
                     for group in groups:
                         try:
@@ -1488,7 +1490,6 @@ def real_main():
         # Determinando os tipos de instancias em execucao
         existing_master_type = master_nodes[0].instance_type
         existing_slave_type = slave_nodes[0].instance_type
-
         # Essa configuracao de opts.master_instance_type indica que os nodes
         # tem o mesmo tipo de instância tanto para o master qunto para os slaves
         if existing_master_type == existing_slave_type:

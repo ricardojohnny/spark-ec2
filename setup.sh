@@ -100,7 +100,7 @@ echo "Criando arquivos de configuracao local..."
 
 # Copiando spark conf por default
 echo "Enviando arquivos de configuracao do Spark..."
-chmod u+x /root/spark/conf/spark-env.sh 
+chmod u+x /root/spark/conf/spark-env.sh
 /root/spark-ec2/copy-dir /root/spark/conf
 
 # Instalar mais modulos
@@ -113,5 +113,19 @@ for module in $MODULES; do
   echo_time_diff "$module setup" "$module_setup_start_time" "$module_setup_end_time"
   cd /root/spark-ec2
 done
+
+# Sync dir H2 (in cluster)
+echo "RSYNC'ing /root/h2 para outros nodes do cluster..."
+rsync_start_time="$(date +'%s')"
+for node in $SLAVES $OTHER_MASTERS; do
+  echo $node
+  rsync -e "ssh $SSH_OPTS" -az /root/h2 $node:/root &
+  scp $SSH_OPTS ~/.ssh/id_rsa $node:.ssh &
+  sleep 0.1
+done
+wait
+rsync_end_time="$(date +'%s')"
+echo_time_diff "rsync /root/h2" "$rsync_start_time" "$rsync_end_time"
+
 
 popd > /dev/null
