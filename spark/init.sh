@@ -2,10 +2,10 @@
 
 pushd /root > /dev/null
 
-if [ -d "spark/sbin" ]; then
-  echo "Spark seems to be installed. Exiting."
-  return
-fi
+#if [ -d "spark" ]; then
+#  echo "Spark seems to be installed. Exiting."
+#  return
+#fi
 
 # Github tag:
 if [[ "$SPARK_VERSION" == *\|* ]]
@@ -40,7 +40,7 @@ else
   echo "Unpacking Spark"
   tar xvzf spark-*.tgz > /tmp/spark-ec2_spark.log
   rm spark-*.tgz
-  mv -f `ls -d spark-* | grep -v ec2` spark
+  mv `ls -d spark-* | grep -v ec2` spark
 fi
 
 popd > /dev/null
