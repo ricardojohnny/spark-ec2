@@ -197,18 +197,18 @@ def parse_args():
         help="Reinicie a instalacao em um cluster previamente iniciado" +
              "(para debugging)")
     parser.add_option(
-        "--ebs-vol-size", metavar="SIZE", type="int", default=60,
+        "--ebs-vol-size", metavar="SIZE", type="int", default=80,
         help="Tamanho (em GB) de cada volume EBS.")
     parser.add_option(
         "--ebs-vol-type", default="gp2",
         help="Tipo do volume EBS (e.g. 'gp2', 'standard').")
     parser.add_option(
-        "--ebs-vol-num", type="int", default=3,
+        "--ebs-vol-num", type="int", default=2,
         help="Numero de volumes EBS para anexar a cada node como /vol[x]. " +
              "Os volumes sera deletado quando a instancia terminar. " +
              "Somente possivel em EBS-backed AMIs. " +
              "Os volumes do EBS sao apenas anexados se informar --ebs-vol-size > 0. " +
-             "Apenas suporta ate 8 volumes EBS.")
+             "Apenas suporta ate 8 volumes EBS, sendo que o primeiro pertence ao /root/spark.")
     parser.add_option(
         "--placement-group", type="string", default=None,
         help="Qual a regra de grupo que as instancias serao lancadas. " +
@@ -561,7 +561,7 @@ def launch_cluster(conn, opts, cluster_name):
             device.delete_on_termination = True
             block_map["/dev/sd" + chr(ord('s') + i)] = device
 
-    # AWS ignora o device mapper especificado pela nossa AMI nas instancias de modelo M3 (vi isso na resolucao SPARK-3342).
+    # AWS ignora o device mapper especificado pela nossa AMI nas instancias de modelo M3.
     if opts.instance_type.startswith('m3.'):
         for i in range(get_num_disks(opts.instance_type)):
             dev = BlockDeviceType()
@@ -691,7 +691,7 @@ def launch_cluster(conn, opts, cluster_name):
         master_nodes = master_res.instances
         print("Master criado na zona %s, regid = %s" % (zone, master_res.id))
 
-    # Time de aguarde correspondente a SPARK-4983
+    # Time de aguarde
     print("Aguardando propagacao da instancia na AWS...")
     time.sleep(15)
 
@@ -1304,8 +1304,7 @@ def real_main():
             opts.spark_ec2_git_repo.endswith(".git") or \
             not opts.spark_ec2_git_repo.startswith("https://github.com") or \
             not opts.spark_ec2_git_repo.endswith("spark-ec2"):
-        print("spark-ec2-git-repo deve ser um repo do Gitlab WSSIM no / ou no .git. "
-              "Alem disso, somente apoio forks com nomes spark-ec2.", file=stderr)
+        print("spark-ec2-git-repo deve ser um repo do Gitlab WSSIM no / ou no .git.", file=stderr)
         sys.exit(1)
 
     if not (opts.deploy_root_dir is None or

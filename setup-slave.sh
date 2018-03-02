@@ -46,6 +46,7 @@ if [[ $instance_type == r3* || $instance_type == i2* || $instance_type == hi1* ]
       mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdc
       mount -o $EXT4_MOUNT_OPTS /dev/sdc /mnt2
     fi
+
     # Para ativar o suporte TRIM, descomente a seguinte linha
     #echo '/dev/sdf /mnt2  ext4  defaults,noatime,discard 0 0' >> /etc/fstab
     if [[ $instance_type == "hi1.4xlarge" ]]; then
@@ -56,7 +57,7 @@ if [[ $instance_type == r3* || $instance_type == i2* || $instance_type == hi1* ]
 fi
 
 # Aqui monta as opções para usar discos ext3 e xfs (os discos efemeral são ext3, mas usamos xfs para volumes EBS para formatá-los mais rapido)
-XFS_MOUNT_OPTS="defaults,noatime,allocsize=8m"
+XFS_MOUNT_OPTS="defaults,noatime,allocsize=10m"
 
 function setup_ebs_volume {
   device=$1
@@ -86,14 +87,14 @@ function setup_ebs_volume {
 }
 
 # Formatar e montar o EBS volume (/dev/sd[s, t, u, v, w, x, y, z]) as /vol[x] se o device mapper existir
-setup_ebs_volume /dev/sds /vol0
-setup_ebs_volume /dev/sdt /vol1
-setup_ebs_volume /dev/sdu /vol2
-setup_ebs_volume /dev/sdv /vol3
-setup_ebs_volume /dev/sdw /vol4
-setup_ebs_volume /dev/sdx /vol5
-setup_ebs_volume /dev/sdy /vol6
-setup_ebs_volume /dev/sdz /vol7
+setup_ebs_volume /dev/sds /root/spark
+setup_ebs_volume /dev/sdt /vol0
+setup_ebs_volume /dev/sdu /vol1
+setup_ebs_volume /dev/sdv /vol2
+setup_ebs_volume /dev/sdw /vol3
+setup_ebs_volume /dev/sdx /vol4
+setup_ebs_volume /dev/sdy /vol5
+setup_ebs_volume /dev/sdz /vol6
 
 # Um EBS volume em /dev/sdv.
 if [[ -e /vol3 && ! -e /vol ]]; then
@@ -102,6 +103,7 @@ fi
 
 # Dando permissão de execução para os mounts no mnt
 chmod -R a+w /mnt*
+chmod -R a+w /root/spark
 
 # Removendo ~/.ssh/known_hosts porque fica poluído quando comeca no / para muitos
 # Clusters (novas máquinas vao surgir com nomes de host antigos)
