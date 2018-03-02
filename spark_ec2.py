@@ -197,13 +197,13 @@ def parse_args():
         help="Reinicie a instalacao em um cluster previamente iniciado" +
              "(para debugging)")
     parser.add_option(
-        "--ebs-vol-size", metavar="SIZE", type="int", default=0,
+        "--ebs-vol-size", metavar="SIZE", type="int", default=60,
         help="Tamanho (em GB) de cada volume EBS.")
     parser.add_option(
-        "--ebs-vol-type", default="standard",
+        "--ebs-vol-type", default="gp2",
         help="Tipo do volume EBS (e.g. 'gp2', 'standard').")
     parser.add_option(
-        "--ebs-vol-num", type="int", default=1,
+        "--ebs-vol-num", type="int", default=3,
         help="Numero de volumes EBS para anexar a cada node como /vol[x]. " +
              "Os volumes sera deletado quando a instancia terminar. " +
              "Somente possivel em EBS-backed AMIs. " +
@@ -786,7 +786,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'jobserver', 'h2']
+               'mapreduce', 'spark-standalone', 'h2', 'jobserver']
 
 # REMOVER ESSA CONFIG NA ENTREGA!
 # pois nao sera usado uma versao antiga do Hadoop...
