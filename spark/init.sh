@@ -40,7 +40,9 @@ else
   echo "Unpacking Spark"
   tar xvzf spark-*.tgz > /tmp/spark-ec2_spark.log
   rm spark-*.tgz
-  mv `ls -d spark-* | grep -v ec2` spark
+  mv `ls -d spark-* | grep -v ec2` spark-install
+  cp -rf spark-install /root/spark
+  rm -rf spark-install
 fi
 
 popd > /dev/null
