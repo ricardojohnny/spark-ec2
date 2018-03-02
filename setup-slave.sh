@@ -32,7 +32,7 @@ if [[ $instance_type == r3* || $instance_type == i2* || $instance_type == hi1* ]
   EXT4_MOUNT_OPTS="defaults,noatime"
   rm -rf /mnt*
   mkdir /mnt
-  
+
   # Para ativar o suporte TRIM, descomente a linha abaixo.
   #echo '/dev/sdb /mnt  ext4  defaults,noatime,discard 0 0' >> /etc/fstab
   mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdb
@@ -126,3 +126,6 @@ popd > /dev/null
 # Isto é para definir o ulimit para root e outros usuários
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
+
+# Copia do dir H2 para o /root_dir nos slaves
+cp -rf /root/spark-ec2/templates/root/h2 /root
