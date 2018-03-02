@@ -43,7 +43,8 @@ VALID_SPARK_VERSIONS = set([
     "2.1.0",
     "2.1.1",
     "2.2.0",
-    "2.2.1"
+    "2.2.1",
+    "2.3.0"
 ])
 
 DEFAULT_SPARK_VERSION = SPARK_EC2_VERSION
@@ -785,7 +786,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'h2', 'jobserver']
+               'mapreduce', 'spark-standalone', 'jobserver', 'h2']
 
 # REMOVER ESSA CONFIG NA ENTREGA!
 # pois nao sera usado uma versao antiga do Hadoop...

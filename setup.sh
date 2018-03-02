@@ -76,6 +76,17 @@ pssh --inline \
 setup_slave_end_time="$(date +'%s')"
 echo_time_diff "setup-slave" "$setup_slave_start_time" "$setup_slave_end_time"
 
+# Sync H2 Base to Slaves
+echo "RSYNC'ing /root/h2 para outros nodes do cluster..."
+rsync_start_time="$(date +'%s')"
+for node in $SLAVES $OTHER_MASTERS; do
+  echo $node
+  rsync -e "ssh $SSH_OPTS" -az /root/h2 $node:/root &
+  scp $SSH_OPTS ~/.ssh/id_rsa $node:.ssh &
+  sleep 0.1
+done
+wait
+
 # Sempre incluir o modulo do 'scala'
 if [[ ! $MODULES =~ *scala* ]]; then
   MODULES=$(printf "%s\n%s\n" "scala" $MODULES)
