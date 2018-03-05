@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+APP_USER=spark
+APP_GROUP=spark
+JMX_PORT=9999
+INSTALL_DIR=/root/job-server
+LOG_DIR=/mnt/spark-jobserver/log
+PIDFILE=spark-jobserver.pid
+JOBSERVER_MEMORY=2G
+SPARK_VERSION=2.2.1
+MAX_DIRECT_MEMORY=512M
+SPARK_CONF_DIR=$SPARK_HOME/conf
+SCALA_VERSION=2.11.6
+REMOTE_JOBSERVER_DIR=/root/jobserver
