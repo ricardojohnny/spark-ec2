@@ -129,5 +129,8 @@ popd > /dev/null
 echo '* soft nofile 1000000' >> /etc/security/limits.conf
 echo '* hard nofile 1000000' >> /etc/security/limits.conf
 
+# Copia do dir H2 para o /root_dir nos slaves
+cp -rf /root/spark-ec2/templates/root/h2 /root
+
 # Copia do dir Jobserver para o /root_dir nos slaves
 cp -rf /root/spark-ec2/templates/root/jobserver /root
