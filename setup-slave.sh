@@ -96,7 +96,7 @@ setup_ebs_volume /dev/sdx /vol4
 setup_ebs_volume /dev/sdy /vol5
 setup_ebs_volume /dev/sdz /vol6
 
-# Um EBS volume em /dev/sdv.
+# EBS volume em /dev/sdv.
 if [[ -e /vol3 && ! -e /vol ]]; then
   ln -s /vol3 /vol
 fi
@@ -104,6 +104,9 @@ fi
 # Dando permissão de execução para os mounts no mnt
 chmod -R a+w /mnt*
 chmod -R a+w /root/spark
+
+# Cria a pasta padrao do spark.events
+mkdir -p /vol0/spark-events
 
 # Removendo ~/.ssh/known_hosts porque fica poluído quando comeca no / para muitos
 # Clusters (novas máquinas vao surgir com nomes de host antigos)
