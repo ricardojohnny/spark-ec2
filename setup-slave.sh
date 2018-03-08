@@ -18,6 +18,9 @@ hostname $PRIVATE_DNS
 echo $PRIVATE_DNS > /etc/hostname
 HOSTNAME=$PRIVATE_DNS
 
+# Export envs customizadas
+export "$(/root/spark-ec2/export.bash)"
+
 echo "checking/fixing resolution of hostname"
 bash /root/spark-ec2/resolve-hostname.sh
 
