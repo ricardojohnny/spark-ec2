@@ -24,6 +24,7 @@ source ec2-variables.sh
 # Setando hostname baseado no EC2 private DNS, e verificando se esta corretamente setado
 PRIVATE_DNS=`wget -q -O - http://169.254.169.254/latest/meta-data/local-hostname`
 PUBLIC_DNS=`wget -q -O - http://169.254.169.254/latest/meta-data/hostname`
+export SPARK_MASTER=`aws ec2 describe-instances --region sa-east-1 --filters 'Name=instance.group-name,Values=spark-cluster-ms-master' --query 'Reservations[].Instances[].[PublicDnsName]' --output text | sed '$!N;s/\n/ /'`
 hostname $PRIVATE_DNS
 echo $PRIVATE_DNS > /etc/hostname
 export HOSTNAME=$PRIVATE_DNS
@@ -47,6 +48,12 @@ fi
 
 if [[ `tty` == "not a tty" ]] ; then
     echo "Expecting a tty or pty! (use the ssh -t option)."
+    exit 1
+fi
+
+if [[ "x$SPARK_HOME" == "x" ]] ; then
+    echo "Expected SPARK_HOME to be set in .bash_profile!"
+    export SPARK_HOME=/root/spark
     exit 1
 fi
 
