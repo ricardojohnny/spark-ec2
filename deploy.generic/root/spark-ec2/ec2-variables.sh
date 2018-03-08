@@ -17,8 +17,3 @@ export SPARK_WORKER_INSTANCES="{{spark_worker_instances}}"
 export SPARK_MASTER_OPTS="{{spark_master_opts}}"
 export AWS_ACCESS_KEY_ID="{{aws_access_key_id}}"
 export AWS_SECRET_ACCESS_KEY="{{aws_secret_access_key}}"
-
-
-# Export envs customizadas
-echo - e "Set Envs Customizadas..."
-export "$(/root/spark-ec2/export.bash)"

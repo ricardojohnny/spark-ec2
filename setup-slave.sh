@@ -137,7 +137,3 @@ cp -rf /root/spark-ec2/templates/root/h2 /root
 
 # Copia do dir Jobserver para o /root_dir nos slaves
 cp -rf /root/spark-ec2/templates/root/jobserver /root
-
-# Export envs customizadas
-echo - e "Set Envs Customizadas..."
-export "$(/root/spark-ec2/export.bash)"

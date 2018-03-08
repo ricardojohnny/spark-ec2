@@ -1,6 +1,10 @@
 #!/bin/bash
 # Arquitetura Cloud Wealthsystems
 
+# Export envs customizadas
+echo - e "Set Envs Customizadas..."
+export "$(/root/spark-ec2/export.bash)"
+
 # Permission files
 echo -e "....: Setando as permissoes nos arquivos :....\n"
 chmod a+x /root/jobserver/server_start.sh
