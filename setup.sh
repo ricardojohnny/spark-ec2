@@ -125,4 +125,7 @@ for module in $MODULES; do
   cd /root/spark-ec2
 done
 
+# Export envs customizadas
+export "$(/root/spark-ec2/export.bash)"
+
 popd > /dev/null
