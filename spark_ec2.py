@@ -1165,7 +1165,6 @@ def ssh(host, opts, command):
             time.sleep(30)
             tries = tries + 1
 
-
 # Backported do Python 2.7 para compatibilidade com 2.6
 # Isso foi achado no stackoverflow
 def _check_output(*popenargs, **kwargs):
