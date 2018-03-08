@@ -27,7 +27,3 @@ if [ $? -ne 0  ]; then
     fi
 
 fi
-
-# Export envs customizadas
-echo - e "Set Envs Customizadas..."
-export "$(/root/spark-ec2/export.bash)"
